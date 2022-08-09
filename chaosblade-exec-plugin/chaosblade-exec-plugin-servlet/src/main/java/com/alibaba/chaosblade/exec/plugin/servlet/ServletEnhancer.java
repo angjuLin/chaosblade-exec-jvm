@@ -18,10 +18,12 @@ package com.alibaba.chaosblade.exec.plugin.servlet;
 
 import com.alibaba.chaosblade.exec.common.aop.BeforeEnhancer;
 import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
+import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
 import com.alibaba.chaosblade.exec.common.util.JsonUtil;
 import com.alibaba.chaosblade.exec.common.util.ReflectUtil;
 import com.alibaba.chaosblade.exec.common.util.StringUtils;
+import com.pamirs.pradar.PradarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +52,7 @@ public class ServletEnhancer extends BeforeEnhancer {
         matcherModel.add(ServletConstant.METHOD_KEY, requestMethod);
         matcherModel.add(ServletConstant.REQUEST_PATH_KEY, requestURI);
         matcherModel.add(ServletConstant.REQUEST_PATH_REGEX_PATTERN_KEY, requestURI);
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
         LOOGER.debug("servlet matchers: {}", JsonUtil.writer().writeValueAsString(matcherModel));
 
         Map<String, Object> queryString = getQueryString(requestMethod, request);

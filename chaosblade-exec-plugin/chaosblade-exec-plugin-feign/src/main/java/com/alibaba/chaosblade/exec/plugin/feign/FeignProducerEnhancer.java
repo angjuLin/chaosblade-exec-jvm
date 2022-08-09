@@ -1,14 +1,15 @@
 package com.alibaba.chaosblade.exec.plugin.feign;
 
-import java.lang.reflect.Method;
-
 import com.alibaba.chaosblade.exec.common.aop.BeforeEnhancer;
 import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
+import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
 import com.alibaba.chaosblade.exec.common.util.ReflectUtil;
-
+import com.pamirs.pradar.PradarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Method;
 
 /**
  * @author guoyu486@gmail.com
@@ -33,6 +34,7 @@ public class FeignProducerEnhancer extends BeforeEnhancer implements FeignConsta
         MatcherModel matcherModel = new MatcherModel();
         matcherModel.add(SERVICE_NAME, serviceName);
         matcherModel.add(TEMPLATE_URL, template);
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("feign template url: {}", template);
         }

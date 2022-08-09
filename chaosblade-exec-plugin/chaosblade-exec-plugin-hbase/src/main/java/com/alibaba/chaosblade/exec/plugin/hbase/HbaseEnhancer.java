@@ -18,9 +18,11 @@ package com.alibaba.chaosblade.exec.plugin.hbase;
 
 import com.alibaba.chaosblade.exec.common.aop.BeforeEnhancer;
 import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
+import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
 import com.alibaba.chaosblade.exec.common.util.JsonUtil;
 import com.alibaba.chaosblade.exec.common.util.StringUtils;
+import com.pamirs.pradar.PradarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +48,7 @@ public class HbaseEnhancer extends BeforeEnhancer {
                                             methodArguments)
         throws Exception {
         MatcherModel matcherModel = new MatcherModel();
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
         matcherModel.add(HbaseConstant.TABLE, getTableName(methodArguments));
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("hbase matchers: {}", JsonUtil.writer().writeValueAsString(matcherModel));

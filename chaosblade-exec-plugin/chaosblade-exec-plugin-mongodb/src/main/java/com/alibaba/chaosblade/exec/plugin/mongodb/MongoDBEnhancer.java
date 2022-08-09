@@ -18,9 +18,11 @@ package com.alibaba.chaosblade.exec.plugin.mongodb;
 
 import com.alibaba.chaosblade.exec.common.aop.BeforeEnhancer;
 import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
+import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
 import com.alibaba.chaosblade.exec.common.util.JsonUtil;
 import com.alibaba.chaosblade.exec.common.util.ReflectUtil;
+import com.pamirs.pradar.PradarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,6 +122,8 @@ public class MongoDBEnhancer extends BeforeEnhancer {
         if (database != null) {
             matcherModel.add(MongoDBConstant.DATABASE_MATCHER_NAME, database);
         }
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
+
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("mongodb matchers: {}", JsonUtil.writer().writeValueAsString(matcherModel));

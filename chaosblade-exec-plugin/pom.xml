@@ -61,6 +61,11 @@
             <artifactId>chaosblade-exec-spi</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.shulie.instrument.module</groupId>
+            <artifactId>simulator-bootstrap-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -2,9 +2,11 @@ package com.alibaba.chaosblade.exec.plugin.rabbitmq.consumer;
 
 import com.alibaba.chaosblade.exec.common.aop.BeforeEnhancer;
 import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
+import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
 import com.alibaba.chaosblade.exec.common.util.ReflectUtil;
 import com.alibaba.chaosblade.exec.plugin.rabbitmq.RabbitMqConstant;
+import com.pamirs.pradar.PradarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +25,7 @@ public class RabbitMqConsumerEnhancer extends BeforeEnhancer implements RabbitMq
         String exchange = ReflectUtil.invokeMethod(envelope, GET_EXCHANGE_METHOD, new Object[]{}, false);
         String routingKey = ReflectUtil.invokeMethod(envelope, GET_ROUTING_KEY_METHOD, new Object[]{}, false);
         MatcherModel matcherModel = new MatcherModel();
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
         matcherModel.add(EXCHANGE_KEY, exchange);
         matcherModel.add(ROUTING_KEY, routingKey);
         matcherModel.add(TOPIC_KEY, routingKey);

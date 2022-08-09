@@ -50,4 +50,13 @@ public interface ServletConstant {
 
     String GET_QUERY_STRING = "getQueryString";
     /** ----------- servlet request method --------* */
+
+
+    /**
+     * ----------- servlet header method --------*
+     */
+    String GET_CLUSTER_TESTER_HEADER = "getHeader";
+    String CLUSTER_TESTER_KEY = "User-Agent";
+    /**----------- servlet header method --------*/
+
 }

@@ -17,9 +17,11 @@
 package com.alibaba.chaosblade.exec.plugin.jedis;
 
 import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
+import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
 import com.alibaba.chaosblade.exec.common.util.JsonUtil;
 import com.alibaba.chaosblade.exec.common.util.ReflectUtil;
+import com.pamirs.pradar.PradarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Iterator;
@@ -45,6 +47,7 @@ public class Jedis4EnhancerStrategy  implements JedisMultiVersionStrategy {
             }
         }
         MatcherModel matcherModel = new MatcherModel();
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
         if (cmdAndKeyArray[0] != null) {
             matcherModel.add(JedisConstant.COMMAND_TYPE_MATCHER_NAME, cmdAndKeyArray[0].toLowerCase());
         }

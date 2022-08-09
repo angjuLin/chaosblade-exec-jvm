@@ -16,23 +16,23 @@
 
 package com.alibaba.chaosblade.exec.plugin.http;
 
-import java.lang.reflect.Method;
-import java.net.SocketTimeoutException;
-import java.util.Map;
-
-import com.alibaba.chaosblade.exec.common.aop.matcher.busi.BusinessParamMatcher;
-import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alibaba.chaosblade.exec.common.aop.BeforeEnhancer;
 import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
+import com.alibaba.chaosblade.exec.common.aop.matcher.busi.BusinessParamMatcher;
+import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.action.delay.BaseTimeoutExecutor;
 import com.alibaba.chaosblade.exec.common.model.action.delay.TimeoutExecutor;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
 import com.alibaba.chaosblade.exec.common.util.FlagUtil;
 import com.alibaba.chaosblade.exec.common.util.JsonUtil;
 import com.alibaba.chaosblade.exec.plugin.http.model.CallPointMatcher;
+import com.pamirs.pradar.PradarService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Method;
+import java.net.SocketTimeoutException;
+import java.util.Map;
 
 /**
  * @Author yuhan
@@ -49,6 +49,7 @@ public abstract class HttpEnhancer extends BeforeEnhancer {
                                                 methodArguments)
             throws Exception {
         MatcherModel matcherModel = new MatcherModel();
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
         matcherModel.add(HttpConstant.URI_KEY, getUrl(object, methodArguments));
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("http matchers: {}", JsonUtil.writer().writeValueAsString(matcherModel));

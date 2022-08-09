@@ -16,20 +16,21 @@
 
 package com.alibaba.chaosblade.exec.plugin.dubbo;
 
-import java.lang.reflect.Method;
-import java.util.Map;
-
 import com.alibaba.chaosblade.exec.common.aop.BeforeEnhancer;
 import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
 import com.alibaba.chaosblade.exec.common.aop.matcher.busi.BusinessParamMatcher;
 import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.action.delay.TimeoutExecutor;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
-import com.alibaba.chaosblade.exec.common.util.*;
+import com.alibaba.chaosblade.exec.common.util.JsonUtil;
+import com.alibaba.chaosblade.exec.common.util.ReflectUtil;
 import com.alibaba.chaosblade.exec.plugin.dubbo.model.DubboThreadPoolFullExecutor;
-
+import com.pamirs.pradar.PradarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * @author Changjun Xiao
@@ -99,6 +100,8 @@ public abstract class DubboEnhancer extends BeforeEnhancer {
         matcherModel.add(DubboConstant.APP_KEY, appName);
         matcherModel.add(DubboConstant.SERVICE_KEY, serviceAndVersionGroup[0]);
         matcherModel.add(DubboConstant.VERSION_KEY, serviceAndVersionGroup[1]);
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
+
         if (2 < serviceAndVersionGroup.length &&
                 null != serviceAndVersionGroup[2]) {
             matcherModel.add(DubboConstant.GROUP_KEY, serviceAndVersionGroup[2]);

@@ -45,4 +45,6 @@ public interface ModelConstant {
      * the flag of buisness params
      */
     String BUSINESS_PARAMS = "b-params";
+
+    String CLUSTER_TEST = "cluster_test";
 }
