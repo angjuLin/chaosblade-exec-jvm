@@ -40,8 +40,19 @@ public class LettuceEnhancer extends BeforeEnhancer {
         if (keyArgument == null) {
             return null;
         }
-        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
         Object key = ReflectUtil.getFieldValue(keyArgument, "key", false);
+        //注意 lettuce 切的点是netty 数据out的切点，这里只能根据keyArgument的前缀判断，所以演练流量不支持黑名单配置，否则无法识别流量
+        try {
+            String keyTemp;
+            if (key instanceof byte[]) {
+                keyTemp = new String((byte[])key);
+            } else if (key instanceof char[]) {
+                keyTemp = new String((char[])key);
+            } else {
+                keyTemp = String.valueOf(key);
+            }
+            matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTestPrefix(keyTemp));
+        } catch (Throwable ignore) {}
         matcherModel.add(KEY, key);
         matcherModel.add(CMD, commandType);
         logger.debug("lettuce matchers: {}", JsonUtil.writer().writeValueAsString(matcherModel));

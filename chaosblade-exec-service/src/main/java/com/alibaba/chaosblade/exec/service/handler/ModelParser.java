@@ -16,18 +16,15 @@
 
 package com.alibaba.chaosblade.exec.service.handler;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
+import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.FlagSpec;
 import com.alibaba.chaosblade.exec.common.model.Model;
 import com.alibaba.chaosblade.exec.common.model.action.ActionSpec;
 import com.alibaba.chaosblade.exec.common.transport.Request;
 import com.alibaba.chaosblade.exec.common.util.StringUtil;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * @author Changjun Xiao
@@ -61,6 +58,10 @@ public class ModelParser {
             }
             // add matcher flag
             model.getMatcher().add(key, entry.getValue());
+        }
+        //TODO 压测流量识别，后续需要控制台配置
+        if (System.getProperty(ModelConstant.CLUSTER_TEST) != null) {
+            model.getMatcher().add(ModelConstant.CLUSTER_TEST, Boolean.valueOf(System.getProperty(ModelConstant.CLUSTER_TEST)));
         }
         return model;
     }

@@ -116,7 +116,7 @@ public class Injector {
 
     /**
      * Compare the experiment rule with the date collected by method enhancer
-     *
+     * model中配置的matcher只要能在 enhancerModel 的matcher
      * @param model
      * @param enhancerModel
      * @return
