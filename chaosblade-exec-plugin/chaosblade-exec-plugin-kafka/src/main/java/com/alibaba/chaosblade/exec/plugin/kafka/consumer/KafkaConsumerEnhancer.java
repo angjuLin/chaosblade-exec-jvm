@@ -4,14 +4,16 @@ import com.alibaba.chaosblade.exec.common.aop.BeforeEnhancer;
 import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
 import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
+import com.alibaba.chaosblade.exec.common.util.PradarServiceWrapper;
 import com.alibaba.chaosblade.exec.common.util.ReflectUtil;
 import com.alibaba.chaosblade.exec.plugin.kafka.KafkaConstant;
-import com.pamirs.pradar.PradarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author ljzhxx@gmail.com
@@ -47,7 +49,7 @@ public class KafkaConsumerEnhancer extends BeforeEnhancer implements KafkaConsta
         }
 
         MatcherModel matcherModel = new MatcherModel();
-        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarServiceWrapper.isClusterTest());
 
         for (String item : topicKeySet) {
             if (LOGGER.isDebugEnabled()) {

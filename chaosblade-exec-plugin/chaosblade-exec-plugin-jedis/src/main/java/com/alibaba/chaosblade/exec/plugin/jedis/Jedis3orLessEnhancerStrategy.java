@@ -20,11 +20,13 @@ import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
 import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
 import com.alibaba.chaosblade.exec.common.util.JsonUtil;
-import com.pamirs.pradar.PradarService;
+import com.alibaba.chaosblade.exec.common.util.PradarServiceWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static com.alibaba.chaosblade.exec.plugin.jedis.JedisEnhancer.CHARSET;
 
 /**
@@ -57,7 +59,7 @@ public class Jedis3orLessEnhancerStrategy implements JedisMultiVersionStrategy {
         }
 
         MatcherModel matcherModel = new MatcherModel();
-        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarServiceWrapper.isClusterTest());
         matcherModel.add(JedisConstant.COMMAND_TYPE_MATCHER_NAME, cmd.toLowerCase());
         if (key != null) {
             matcherModel.add(JedisConstant.KEY_MATCHER_NAME, key);

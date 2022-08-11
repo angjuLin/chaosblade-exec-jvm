@@ -6,10 +6,10 @@ import com.alibaba.chaosblade.exec.common.model.action.delay.BaseTimeoutExecutor
 import com.alibaba.chaosblade.exec.common.model.action.delay.TimeoutExecutor;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
 import com.alibaba.chaosblade.exec.common.util.JsonUtil;
+import com.alibaba.chaosblade.exec.common.util.PradarServiceWrapper;
 import com.alibaba.chaosblade.exec.common.util.ReflectUtil;
 import com.alibaba.chaosblade.exec.plugin.tars.TarsConstant;
 import com.alibaba.chaosblade.exec.plugin.tars.TarsEnhancer;
-import com.pamirs.pradar.PradarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +55,7 @@ public class TarsClientEnhancer extends TarsEnhancer {
         matcherModel.add(TarsConstant.SERVANT_NAME, servantName);
         matcherModel.add(TarsConstant.FUNCTION_NAME, functionName);
         matcherModel.add(TarsConstant.CLIENT, "true");
-        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarServiceWrapper.isClusterTest());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("tars matchers: {}", JsonUtil.writer().writeValueAsString(matcherModel));

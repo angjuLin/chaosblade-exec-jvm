@@ -21,10 +21,10 @@ import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
 import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
 import com.alibaba.chaosblade.exec.common.util.JsonUtil;
+import com.alibaba.chaosblade.exec.common.util.PradarServiceWrapper;
 import com.alibaba.chaosblade.exec.common.util.ReflectUtil;
 import com.alibaba.chaosblade.exec.common.util.SQLParserUtil;
 import com.alibaba.chaosblade.exec.common.util.SQLParserUtil.SqlType;
-import com.pamirs.pradar.PradarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +67,7 @@ public class PostgrelsqlEnhancer extends BeforeEnhancer {
         String database = ReflectUtil.invokeMethod(object, "getDatabase", new Object[0], false);
 
         MatcherModel matcherModel = new MatcherModel();
-        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarServiceWrapper.isClusterTest());
         matcherModel.add(PostgrelsqlConstant.HOST_MATCHER_NAME, host);
         matcherModel.add(PostgrelsqlConstant.TABLE_MATCHER_NAME, table);
         matcherModel.add(PostgrelsqlConstant.DATABASE_MATCHER_NAME, database);

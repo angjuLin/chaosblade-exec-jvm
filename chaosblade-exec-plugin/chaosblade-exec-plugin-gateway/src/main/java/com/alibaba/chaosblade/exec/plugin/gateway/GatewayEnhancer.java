@@ -5,10 +5,11 @@ import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
 import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
 import com.alibaba.chaosblade.exec.common.util.JsonUtil;
+import com.alibaba.chaosblade.exec.common.util.PradarServiceWrapper;
 import com.alibaba.chaosblade.exec.common.util.ReflectUtil;
-import com.pamirs.pradar.PradarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Method;
 
 /**
@@ -32,7 +33,7 @@ public class GatewayEnhancer extends BeforeEnhancer {
         Object serverWebExchange = methodArguments[0];
         Object request = ReflectUtil.invokeMethod(serverWebExchange, "getRequest", new Object[] {}, false);
         MatcherModel matcherModel = new MatcherModel();
-        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarServiceWrapper.isClusterTest());
         if(request != null){
             Object url = ReflectUtil.invokeMethod(request, "getURI", new Object[] {}, false);
             if(url != null){

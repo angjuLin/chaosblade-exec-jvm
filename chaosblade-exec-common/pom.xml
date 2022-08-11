@@ -30,6 +30,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.shulie.instrument.module</groupId>
+            <artifactId>simulator-bootstrap-api</artifactId>
+            <version>1.0.0</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>com.alibaba.chaosblade</groupId>
             <artifactId>chaosblade-exec-spi</artifactId>
             <version>${project.version}</version>

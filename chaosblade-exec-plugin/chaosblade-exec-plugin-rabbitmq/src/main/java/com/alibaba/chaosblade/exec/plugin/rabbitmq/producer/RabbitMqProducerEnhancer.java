@@ -4,8 +4,8 @@ import com.alibaba.chaosblade.exec.common.aop.BeforeEnhancer;
 import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
 import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
+import com.alibaba.chaosblade.exec.common.util.PradarServiceWrapper;
 import com.alibaba.chaosblade.exec.plugin.rabbitmq.RabbitMqConstant;
-import com.pamirs.pradar.PradarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public class RabbitMqProducerEnhancer extends BeforeEnhancer implements RabbitMq
         String exchange = (String) methodArguments[0];
         String routingKey = (String) methodArguments[1];
         MatcherModel matcherModel = new MatcherModel();
-        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarServiceWrapper.isClusterTest());
         matcherModel.add(EXCHANGE_KEY, exchange);
         matcherModel.add(ROUTING_KEY, routingKey);
         matcherModel.add(TOPIC_KEY, routingKey);

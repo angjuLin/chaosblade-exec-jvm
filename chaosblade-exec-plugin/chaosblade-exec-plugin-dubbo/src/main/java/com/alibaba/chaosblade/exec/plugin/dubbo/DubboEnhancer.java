@@ -23,9 +23,9 @@ import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.action.delay.TimeoutExecutor;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
 import com.alibaba.chaosblade.exec.common.util.JsonUtil;
+import com.alibaba.chaosblade.exec.common.util.PradarServiceWrapper;
 import com.alibaba.chaosblade.exec.common.util.ReflectUtil;
 import com.alibaba.chaosblade.exec.plugin.dubbo.model.DubboThreadPoolFullExecutor;
-import com.pamirs.pradar.PradarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,7 +100,7 @@ public abstract class DubboEnhancer extends BeforeEnhancer {
         matcherModel.add(DubboConstant.APP_KEY, appName);
         matcherModel.add(DubboConstant.SERVICE_KEY, serviceAndVersionGroup[0]);
         matcherModel.add(DubboConstant.VERSION_KEY, serviceAndVersionGroup[1]);
-        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTest());
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarServiceWrapper.isClusterTest());
 
         if (2 < serviceAndVersionGroup.length &&
                 null != serviceAndVersionGroup[2]) {

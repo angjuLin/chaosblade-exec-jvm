@@ -5,8 +5,8 @@ import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
 import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
 import com.alibaba.chaosblade.exec.common.util.JsonUtil;
+import com.alibaba.chaosblade.exec.common.util.PradarServiceWrapper;
 import com.alibaba.chaosblade.exec.common.util.ReflectUtil;
-import com.pamirs.pradar.PradarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +51,7 @@ public class LettuceEnhancer extends BeforeEnhancer {
             } else {
                 keyTemp = String.valueOf(key);
             }
-            matcherModel.add(ModelConstant.CLUSTER_TEST, PradarService.isClusterTestPrefix(keyTemp));
+            matcherModel.add(ModelConstant.CLUSTER_TEST, PradarServiceWrapper.isClusterTestPrefix(keyTemp));
         } catch (Throwable ignore) {}
         matcherModel.add(KEY, key);
         matcherModel.add(CMD, commandType);
