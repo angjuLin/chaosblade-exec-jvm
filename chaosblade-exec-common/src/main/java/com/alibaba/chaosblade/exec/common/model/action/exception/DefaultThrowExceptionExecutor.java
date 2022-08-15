@@ -16,15 +16,14 @@
 
 package com.alibaba.chaosblade.exec.common.model.action.exception;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-
 import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
 import com.alibaba.chaosblade.exec.common.exception.InterruptProcessException;
 import com.alibaba.chaosblade.exec.common.model.FlagSpec;
 import com.alibaba.chaosblade.exec.common.util.StringUtil;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * @author Changjun Xiao
@@ -75,6 +74,11 @@ public class DefaultThrowExceptionExecutor implements ThrowExceptionExecutor {
     @Override
     public Exception throwCustomException(ClassLoader classLoader, String exception, String exceptionMessage) {
         try {
+            //增强的jdk代码classLoader是null的
+            if (null == classLoader) {
+                Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(exception);
+                return instantiateException(clazz, exceptionMessage);
+            }
             Class<?> clazz = classLoader.loadClass(exception);
             return instantiateException(clazz, exceptionMessage);
         } catch (Throwable e) {
