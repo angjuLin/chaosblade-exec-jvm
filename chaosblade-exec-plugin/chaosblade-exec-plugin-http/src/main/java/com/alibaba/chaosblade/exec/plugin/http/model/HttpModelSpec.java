@@ -67,6 +67,7 @@ public class HttpModelSpec extends FrameworkModelSpec {
         matcherSpecs.add(new UriMatcherDefSpec());
         matcherSpecs.add(new CallPointMatcherSpec());
         matcherSpecs.add(new BusinessParamsMatcherSpec());
+        matcherSpecs.add(new JdkhttpMatcherSpec());
         return matcherSpecs;
     }
 

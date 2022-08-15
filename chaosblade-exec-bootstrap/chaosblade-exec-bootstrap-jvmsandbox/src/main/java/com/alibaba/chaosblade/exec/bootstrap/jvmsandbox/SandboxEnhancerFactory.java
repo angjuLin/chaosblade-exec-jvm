@@ -49,7 +49,8 @@ public class SandboxEnhancerFactory {
                                          String[] interfaceTypeJavaClassNameArray,
                                          String[] annotationTypeJavaClassNameArray
             ) {
-                if (javaClassName.startsWith(JAVA) || javaClassName.startsWith(SUN) || javaClassName.startsWith("[")
+//                if (javaClassName.startsWith(JAVA) || javaClassName.startsWith(SUN) || javaClassName.startsWith("[")
+                if (javaClassName.startsWith(JAVA) || javaClassName.startsWith("[")
                     || javaClassName.startsWith(CHAOSBLADE)) {
                     return false;
                 }

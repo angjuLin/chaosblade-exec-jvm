@@ -16,24 +16,7 @@
 
 package com.alibaba.chaosblade.exec.bootstrap.jvmsandbox;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.annotation.Resource;
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.alibaba.chaosblade.exec.common.aop.Plugin;
-import com.alibaba.chaosblade.exec.common.aop.PluginBean;
-import com.alibaba.chaosblade.exec.common.aop.PluginLifecycleListener;
-import com.alibaba.chaosblade.exec.common.aop.PointCut;
+import com.alibaba.chaosblade.exec.common.aop.*;
 import com.alibaba.chaosblade.exec.common.center.ManagerFactory;
 import com.alibaba.chaosblade.exec.common.model.ModelSpec;
 import com.alibaba.chaosblade.exec.common.transport.Request;
@@ -49,15 +32,28 @@ import com.alibaba.jvm.sandbox.api.Module;
 import com.alibaba.jvm.sandbox.api.ModuleLifecycle;
 import com.alibaba.jvm.sandbox.api.event.Event;
 import com.alibaba.jvm.sandbox.api.event.Event.Type;
+import com.alibaba.jvm.sandbox.api.filter.ExtFilter;
 import com.alibaba.jvm.sandbox.api.filter.Filter;
 import com.alibaba.jvm.sandbox.api.http.Http;
 import com.alibaba.jvm.sandbox.api.resource.ModuleEventWatcher;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Changjun Xiao
@@ -206,6 +202,13 @@ public class SandboxModule implements Module, ModuleLifecycle, PluginLifecycleLi
         }
         String enhancerName = plugin.getEnhancer().getClass().getSimpleName();
         Filter filter = SandboxEnhancerFactory.createFilter(enhancerName, pointCut);
+
+
+        if (((PointCutBean) pointCut).isIncludeBootstrap() || ((PointCutBean) pointCut).isIncludeSubClasses()) {
+            filter = ExtFilter.ExtFilterFactory.make(filter, ((PointCutBean) pointCut).isIncludeSubClasses(), ((PointCutBean) pointCut).isIncludeBootstrap());
+        }
+
+
         // add after event listener. For the after event, the reason for adding the before event is to cache the
         // necessary parameters.
         if (plugin.isAfterEvent()) {

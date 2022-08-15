@@ -22,16 +22,27 @@ import com.alibaba.chaosblade.exec.common.aop.matcher.method.MethodMatcher;
 /**
  * @author Changjun Xiao
  */
-public class PointCutBean implements PointCut {
+public class PointCutBean implements PointCut, ExtPointCut {
     private ClassMatcher classMatcher;
     private MethodMatcher methodMatcher;
+
+    boolean isIncludeSubClasses = false;
+    boolean isIncludeBootstrap = false;
 
     public PointCutBean(PointCut pointCut) {
         if (pointCut != null) {
             this.classMatcher = pointCut.getClassMatcher();
             this.methodMatcher = pointCut.getMethodMatcher();
+            if (pointCut instanceof SubClassesPointCut) {
+                this.isIncludeSubClasses = true;
+            }
+            if (pointCut instanceof BootStrapPointCut) {
+                this.isIncludeBootstrap = true;
+            }
         }
     }
+
+
 
     @Override
     public ClassMatcher getClassMatcher() {
@@ -41,5 +52,15 @@ public class PointCutBean implements PointCut {
     @Override
     public MethodMatcher getMethodMatcher() {
         return this.methodMatcher;
+    }
+
+    @Override
+    public boolean isIncludeSubClasses() {
+        return this.isIncludeSubClasses;
+    }
+
+    @Override
+    public boolean isIncludeBootstrap() {
+        return this.isIncludeBootstrap;
     }
 }
