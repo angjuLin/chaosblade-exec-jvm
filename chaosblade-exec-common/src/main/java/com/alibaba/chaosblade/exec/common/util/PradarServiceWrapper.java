@@ -27,6 +27,9 @@ public class PradarServiceWrapper {
      */
     public static boolean isClusterTestPrefix(String value) {
         try {
+            if (value == null) {
+                return false;
+            }
             return PradarService.isClusterTestPrefix(value);
         } catch (Throwable ignore) {
             return false;

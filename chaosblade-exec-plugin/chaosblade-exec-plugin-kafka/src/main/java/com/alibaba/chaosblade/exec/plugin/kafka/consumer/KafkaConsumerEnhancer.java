@@ -48,15 +48,23 @@ public class KafkaConsumerEnhancer extends BeforeEnhancer implements KafkaConsta
             }
         }
 
-        MatcherModel matcherModel = new MatcherModel();
-        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarServiceWrapper.isClusterTest());
+        //TODO 暂时不支持同一个消费组 消费多个topic，压测标需要根据topic判断，所以不同的topic压测标有可能不一致
+        if (topicKeySet.size() > 1) {
+            LOGGER.warn("KafkaConsumer one consumer subscribe two or more topic, not support");
+            return null;
+        }
 
+        MatcherModel matcherModel = new MatcherModel();
+        String topicTemp = null;
         for (String item : topicKeySet) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("consumer topicKey: {}, matcherModel: {}", item, matcherModel.getMatchers());
             }
             matcherModel.add(TOPIC_KEY, item);
+            topicTemp = item;
         }
+
+        matcherModel.add(ModelConstant.CLUSTER_TEST, PradarServiceWrapper.isClusterTestPrefix(topicTemp));
 
         EnhancerModel enhancerModel = new EnhancerModel(classLoader, matcherModel);
         enhancerModel.addMatcher(CONSUMER_KEY, "true");
