@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author RinaisSuper
@@ -42,6 +44,15 @@ public class RocketMqEnhancer extends BeforeEnhancer implements RocketMqConstant
 
     private static String FIELD_CUSTOM_HEADER = "customHeader";
 
+    private static Set<Integer> includeOptCode = new HashSet<Integer>();
+
+    static {
+        //310 10 是发送消息的code编号，11是拉取消息的编号
+        includeOptCode.add(310);
+        includeOptCode.add(10);
+        includeOptCode.add(11);
+    }
+
     @Override
     public EnhancerModel doBeforeAdvice(ClassLoader classLoader, String className, Object object, Method method,
                                         Object[] methodArguments) throws Exception {
@@ -56,6 +67,10 @@ public class RocketMqEnhancer extends BeforeEnhancer implements RocketMqConstant
             return null;
 //            return new EnhancerModel(classLoader, matcherModel);
         } else {
+            Integer optCode = (Integer) ReflectUtil.getFieldValue(remoteingCommnadRequest, "code", false);
+            if (!includeOptCode.contains(optCode)) {
+                return null;
+            }
             Object header = ReflectUtil.getFieldValue(remoteingCommnadRequest, FIELD_CUSTOM_HEADER, false);
             if (header == null) {
                 return null;
@@ -75,7 +90,8 @@ public class RocketMqEnhancer extends BeforeEnhancer implements RocketMqConstant
                 producerGroup = ReflectUtil.getFieldValue(header, "a", false);
             }
 
-            if (topic == null || consumerGroup == null || producerGroup == null) {
+            //topic不能为空
+            if (topic == null) {
                 return null;
             }
 
