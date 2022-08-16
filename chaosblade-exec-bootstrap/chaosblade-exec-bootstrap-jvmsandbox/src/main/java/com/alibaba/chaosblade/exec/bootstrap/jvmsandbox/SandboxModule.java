@@ -215,7 +215,9 @@ public class SandboxModule implements Module, ModuleLifecycle, PluginLifecycleLi
             int watcherId = moduleEventWatcher.watch(filter, SandboxEnhancerFactory.createAfterEventListener(plugin),
                 Type.BEFORE, Type.RETURN);
             watchIds.put(PluginUtil.getIdentifierForAfterEvent(plugin), watcherId);
-        } else {
+        }
+//        else
+        {
             int watcherId = moduleEventWatcher.watch(
                 filter, SandboxEnhancerFactory.createBeforeEventListener(plugin), Event.Type.BEFORE);
             watchIds.put(PluginUtil.getIdentifier(plugin), watcherId);

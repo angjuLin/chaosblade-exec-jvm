@@ -16,6 +16,7 @@
 
 package com.alibaba.chaosblade.exec.common.aop;
 
+import com.alibaba.chaosblade.exec.common.annotation.AfterEnhancerSupport;
 import com.alibaba.chaosblade.exec.common.model.ModelSpec;
 import com.alibaba.chaosblade.exec.common.plugin.MethodPlugin;
 
@@ -37,6 +38,12 @@ public class PluginBean implements Plugin {
         this.enhancer = plugin.getEnhancer();
         if (plugin instanceof MethodPlugin) {
             this.isAfterEvent = ((MethodPlugin)plugin).isAfterEvent();
+        }
+        if (plugin.getClass().isAnnotationPresent(AfterEnhancerSupport.class)) {
+            this.isAfterEvent = true;
+        }
+        if (plugin.getEnhancer() instanceof AfterEnhancer) {
+            this.isAfterEvent = true;
         }
     }
 

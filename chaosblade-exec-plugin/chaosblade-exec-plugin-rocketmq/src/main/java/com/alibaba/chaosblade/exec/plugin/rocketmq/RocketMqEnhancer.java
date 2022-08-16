@@ -53,11 +53,13 @@ public class RocketMqEnhancer extends BeforeEnhancer implements RocketMqConstant
         Object remoteingCommnadRequest = selectParamByClassName(classLoader, methodArguments, remotingCommandClassName);
 
         if (remoteingCommnadRequest == null) {
-            return new EnhancerModel(classLoader, matcherModel);
+            return null;
+//            return new EnhancerModel(classLoader, matcherModel);
         } else {
             Object header = ReflectUtil.getFieldValue(remoteingCommnadRequest, FIELD_CUSTOM_HEADER, false);
             if (header == null) {
-                return new EnhancerModel(classLoader, matcherModel);
+                return null;
+//                return new EnhancerModel(classLoader, matcherModel);
             }
             String topic = null;
             String consumerGroup = null;
@@ -72,6 +74,11 @@ public class RocketMqEnhancer extends BeforeEnhancer implements RocketMqConstant
                 topic = ReflectUtil.getFieldValue(header, "b", false);
                 producerGroup = ReflectUtil.getFieldValue(header, "a", false);
             }
+
+            if (topic == null || consumerGroup == null || producerGroup == null) {
+                return null;
+            }
+
             matcherModel.add(FLAG_NAME_TOPIC, topic);
             matcherModel.add(FLAG_CONSUMER_GROUP, consumerGroup);
             matcherModel.add(FLAG_PRODUCER_GROUP, producerGroup);

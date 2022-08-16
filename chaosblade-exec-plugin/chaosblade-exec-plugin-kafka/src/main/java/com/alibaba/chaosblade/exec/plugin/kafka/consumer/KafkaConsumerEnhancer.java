@@ -1,6 +1,6 @@
 package com.alibaba.chaosblade.exec.plugin.kafka.consumer;
 
-import com.alibaba.chaosblade.exec.common.aop.BeforeEnhancer;
+import com.alibaba.chaosblade.exec.common.aop.AfterEnhancer;
 import com.alibaba.chaosblade.exec.common.aop.EnhancerModel;
 import com.alibaba.chaosblade.exec.common.constant.ModelConstant;
 import com.alibaba.chaosblade.exec.common.model.matcher.MatcherModel;
@@ -18,15 +18,24 @@ import java.util.Map;
 /**
  * @author ljzhxx@gmail.com
  */
-public class KafkaConsumerEnhancer extends BeforeEnhancer implements KafkaConstant {
+public class KafkaConsumerEnhancer extends AfterEnhancer implements KafkaConstant {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumerEnhancer.class);
 
     @Override
-    public EnhancerModel doBeforeAdvice(ClassLoader classLoader, String className, Object object, Method method, Object[] methodArguments) throws Exception {
-
-        if (methodArguments == null || object == null) {
+    public EnhancerModel doAfterAdvice(ClassLoader classLoader, String className, Object object, Method method, Object[] methodArguments, Object returnObject) throws Exception {
+        if (methodArguments == null || object == null || returnObject == null) {
             LOGGER.warn("The necessary parameter is null.");
+            return null;
+        }
+
+        Boolean recordEmpty = ReflectUtil.invokeMethod(returnObject, "isEmpty", new Object[]{}, false);
+        if (recordEmpty == null) {
+            LOGGER.warn("KafkaConsumerEnhancer isEmpty methodName not exists");
+            return null;
+        }
+        //没有数据也直接返回
+        if (recordEmpty) {
             return null;
         }
 
