@@ -8,9 +8,10 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.net.URI;
-import java.util.Map;
+import java.util.*;
 
-import static com.alibaba.chaosblade.exec.plugin.http.HttpConstant.*;
+import static com.alibaba.chaosblade.exec.plugin.http.HttpConstant.APACHE_ASYNC_HTTP_TARGET_NAME;
+import static com.alibaba.chaosblade.exec.plugin.http.HttpConstant.DEFAULT_TIMEOUT;
 
 /**
  * @author angju
@@ -61,11 +62,31 @@ public class ApacheAsyncHttpClientEnhancer extends HttpEnhancer {
         return null;
     }
 
+    @Override
+    protected Set<String> getUrls(Object instance, Object[] object) throws Exception{
+        Object hostname = ReflectUtil.getFieldValue(object[0], "hostname", false);
+        if (hostname != null) {
+            Set<String> urls = new HashSet<String>();
+            //这种写法可以一次请求多个地址
+            Object port = ReflectUtil.getFieldValue(object[0], "port", false);
+            Object schemeName = ReflectUtil.getFieldValue(object[0], "schemeName", false);
+            for (Object target : (AbstractList)object[1]) {
+                URI uri = (URI) ReflectUtil.invokeMethod(target, "getURI", new Object[]{}, false);
+                urls.add(getService(schemeName.toString(), hostname.toString(), Integer.valueOf(port.toString()), uri.getPath()));
+            }
+            return urls;
+        }
+        return null;
+    }
+
     private String getService(String schema, String host, int port, String path) {
         String url = schema + "://" + host;
         if (port != -1 && port != 80) {
             url = url + ':' + port;
         }
-        return url + path;
+        if (path != null) {
+            return url + path;
+        }
+        return url;
     }
 }

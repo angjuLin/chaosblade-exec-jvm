@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 import java.net.SocketTimeoutException;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @Author yuhan
@@ -51,6 +52,10 @@ public abstract class HttpEnhancer extends BeforeEnhancer {
         MatcherModel matcherModel = new MatcherModel();
         matcherModel.add(ModelConstant.CLUSTER_TEST, PradarServiceWrapper.isClusterTest());
         matcherModel.add(HttpConstant.URI_KEY, getUrl(object, methodArguments));
+        Set<String> urls = getUrls(object, methodArguments);
+        if (urls != null && !urls.isEmpty()) {
+            matcherModel.add(HttpConstant.URI_KEY, urls);
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("http matchers: {}", JsonUtil.writer().writeValueAsString(matcherModel));
         }
@@ -125,5 +130,17 @@ public abstract class HttpEnhancer extends BeforeEnhancer {
      * @return
      */
     protected abstract String getUrl(Object instance, Object[] object) throws Exception;
+
+
+    /**
+     * 获取多个Http Url 请求地址
+     *
+     * @param instance
+     * @param object
+     * @return
+     */
+    protected Set<String> getUrls(Object instance, Object[] object) throws Exception {
+        return null;
+    }
 
 }

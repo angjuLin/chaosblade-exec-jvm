@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -152,6 +153,11 @@ public class Injector {
                 // default match
                 if (String.valueOf(value).equalsIgnoreCase(String.valueOf(entry.getValue()))) {
                     LOGGER.debug("custom match key:{}, value equals, continue", keyName);
+                    continue;
+                }
+
+                //集合形式参数
+                if (value instanceof Set && ((Set<?>) value).contains(entry.getValue())) {
                     continue;
                 }
 
