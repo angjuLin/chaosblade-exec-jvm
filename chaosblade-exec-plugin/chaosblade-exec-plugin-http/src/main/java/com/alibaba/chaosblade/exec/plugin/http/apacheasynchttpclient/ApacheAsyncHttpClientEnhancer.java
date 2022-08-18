@@ -41,7 +41,7 @@ public class ApacheAsyncHttpClientEnhancer extends HttpEnhancer {
             Integer connectionTimeout = ReflectUtil.getFieldValue(requestConfig, "connectTimeout", false);
             return socketTimeout + connectionTimeout;
         } catch (Exception e) {
-            LOGGER.error("getTimeout error {}", e);
+            LOGGER.error("ApacheAsyncHttpClientEnhancer getTimeout error {}", e);
             return DEFAULT_TIMEOUT;
         }
     }
@@ -49,7 +49,16 @@ public class ApacheAsyncHttpClientEnhancer extends HttpEnhancer {
     @Override
     protected String getUrl(Object instance, Object[] object) throws Exception {
         URI uri = (URI) ReflectUtil.invokeMethod(object[0], "getURI", new Object[]{}, false);
-        return getService(uri.getScheme(), uri.getHost(), uri.getPort(), uri.getPath());
+        if (uri != null) {
+            return getService(uri.getScheme(), uri.getHost(), uri.getPort(), uri.getPath());
+        } else {
+            Object request = ReflectUtil.getSuperclassFieldValue(object[0], "request", false);
+            uri = (URI) ReflectUtil.invokeMethod(request, "getURI", new Object[]{}, false);
+            if (uri != null) {
+                return getService(uri.getScheme(), uri.getHost(), uri.getPort(), uri.getPath());
+            }
+        }
+        return null;
     }
 
     private String getService(String schema, String host, int port, String path) {
