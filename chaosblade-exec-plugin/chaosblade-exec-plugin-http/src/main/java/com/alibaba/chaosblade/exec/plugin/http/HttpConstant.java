@@ -18,6 +18,7 @@ public class HttpConstant {
     public static final String OKHTTP3 = "okhttp3";
     public static final String JDKHTTP = "jdkhttp";
     public static final String ASYNC_HTTP_TARGET_NAME = "asyncHttpClient";
+    public static final String APACHE_ASYNC_HTTP_TARGET_NAME = "apacheAsyncHttpClient";
     public static final String getURI = "getURI";
     public static final String CALL_POINT_KEY = "call-point";
 

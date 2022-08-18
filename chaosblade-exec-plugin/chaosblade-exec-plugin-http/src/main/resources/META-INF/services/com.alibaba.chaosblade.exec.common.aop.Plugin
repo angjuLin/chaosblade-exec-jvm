@@ -20,3 +20,4 @@ com.alibaba.chaosblade.exec.plugin.http.httpclient3.HttpClient3Plugin
 com.alibaba.chaosblade.exec.plugin.http.okhttp3.Okhttp3Plugin
 com.alibaba.chaosblade.exec.plugin.http.jdkhttp.JdkhttpPlugin
 com.alibaba.chaosblade.exec.plugin.http.asynchttpclient.AsyncHttpClientPlugin
+com.alibaba.chaosblade.exec.plugin.http.apacheasynchttpclient.ApacheAsyncHttpClientPlugin

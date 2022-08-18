@@ -68,6 +68,7 @@ public class HttpModelSpec extends FrameworkModelSpec {
         matcherSpecs.add(new CallPointMatcherSpec());
         matcherSpecs.add(new BusinessParamsMatcherSpec());
         matcherSpecs.add(new JdkhttpMatcherSpec());
+        matcherSpecs.add(new ApacheAsyncHttpClientMatcherSpec());
         return matcherSpecs;
     }
 
