@@ -72,7 +72,15 @@ public class ApacheAsyncHttpClientEnhancer extends HttpEnhancer {
             Object schemeName = ReflectUtil.getFieldValue(object[0], "schemeName", false);
             for (Object target : (AbstractList)object[1]) {
                 URI uri = (URI) ReflectUtil.invokeMethod(target, "getURI", new Object[]{}, false);
-                urls.add(getService(schemeName.toString(), hostname.toString(), Integer.valueOf(port.toString()), uri.getPath()));
+                if (uri != null) {
+                    urls.add(getService(schemeName.toString(), hostname.toString(), Integer.valueOf(port.toString()), uri.getPath()));
+                } else {
+                    Object request = ReflectUtil.getFieldValue(target, "request", false);
+                    uri = (URI) ReflectUtil.invokeMethod(request, "getURI", new Object[]{}, false);
+                    if (uri != null) {
+                        urls.add(getService(schemeName.toString(), hostname.toString(), Integer.valueOf(port.toString()), uri.getPath()));
+                    }
+                }
             }
             return urls;
         }
