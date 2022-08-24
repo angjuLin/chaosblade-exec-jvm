@@ -16,10 +16,6 @@
 
 package com.alibaba.chaosblade.exec.plugin.dubbo.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import com.alibaba.chaosblade.exec.common.aop.PredicateResult;
 import com.alibaba.chaosblade.exec.common.exception.ExperimentException;
 import com.alibaba.chaosblade.exec.common.model.FrameworkModelSpec;
@@ -37,6 +33,10 @@ import com.alibaba.chaosblade.exec.common.model.matcher.MatcherSpec;
 import com.alibaba.chaosblade.exec.common.plugin.MethodNameMatcherSpec;
 import com.alibaba.chaosblade.exec.plugin.dubbo.DubboConstant;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author Changjun Xiao
  */
@@ -45,7 +45,8 @@ public class DubboModelSpec extends FrameworkModelSpec implements PreCreateInjec
 
     public DubboModelSpec() {
         super();
-        addThreadPoolFullActionSpec();
+        //会影响所有的流量，所以暂时不支持先
+//        addThreadPoolFullActionSpec();
         addActionExample();
     }
 

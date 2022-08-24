@@ -1,26 +1,21 @@
 package com.alibaba.chaosblade.exec.plugin.druid;
 
 import com.alibaba.chaosblade.exec.common.aop.PredicateResult;
-import com.alibaba.chaosblade.exec.common.exception.ExperimentException;
-import com.alibaba.chaosblade.exec.common.model.BaseModelSpec;
+import com.alibaba.chaosblade.exec.common.model.FrameworkModelSpec;
 import com.alibaba.chaosblade.exec.common.model.Model;
-import com.alibaba.chaosblade.exec.common.model.action.ActionExecutor;
-import com.alibaba.chaosblade.exec.common.model.action.ActionSpec;
 import com.alibaba.chaosblade.exec.common.model.action.connpool.ConnectionPoolFullActionSpec;
-import com.alibaba.chaosblade.exec.common.model.action.delay.DelayActionSpec;
-import com.alibaba.chaosblade.exec.common.model.handler.PreCreateInjectionModelHandler;
-import com.alibaba.chaosblade.exec.common.model.handler.PreDestroyInjectionModelHandler;
+import com.alibaba.chaosblade.exec.common.model.matcher.MatcherSpec;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Changjun Xiao
  */
-public class DruidModelSpec extends BaseModelSpec implements PreCreateInjectionModelHandler,
-        PreDestroyInjectionModelHandler {
+public class DruidModelSpec extends FrameworkModelSpec  {
 
     public DruidModelSpec() {
         super();
-        addConnectionPoolFullAction();
-        addDelayActionSpec();
     }
 
     @Override
@@ -43,35 +38,7 @@ public class DruidModelSpec extends BaseModelSpec implements PreCreateInjectionM
         return PredicateResult.success();
     }
 
-    @Override
-    public void preCreate(String suid, Model model) throws ExperimentException {
-        if (ConnectionPoolFullActionSpec.NAME.equals(model.getActionName())) {
-            ActionSpec actionSpec = getActionSpec(model.getActionName());
-            ActionExecutor actionExecutor = actionSpec.getActionExecutor();
-            if (actionExecutor instanceof DruidConnectionPoolFullExecutor) {
-                DruidConnectionPoolFullExecutor executor = (DruidConnectionPoolFullExecutor) actionExecutor;
-                executor.setExpReceived(true);
-            } else {
-                throw new ExperimentException("The executor about connection pool full for tddl is error when "
-                        + "creating");
-            }
-        }
-    }
 
-    @Override
-    public void preDestroy(String suid, Model model) throws ExperimentException {
-        if (ConnectionPoolFullActionSpec.NAME.equals(model.getActionName())) {
-            ActionSpec actionSpec = getActionSpec(model.getActionName());
-            ActionExecutor actionExecutor = actionSpec.getActionExecutor();
-            if (actionExecutor instanceof DruidConnectionPoolFullExecutor) {
-                DruidConnectionPoolFullExecutor executor = (DruidConnectionPoolFullExecutor)actionExecutor;
-                executor.revoke();
-            } else {
-                throw new ExperimentException("The executor about connection pool full for tddl is error when "
-                    + "destroying");
-            }
-        }
-    }
 
     private void addConnectionPoolFullAction() {
         ConnectionPoolFullActionSpec actionSpec = new ConnectionPoolFullActionSpec(DruidConnectionPoolFullExecutor.INSTANCE);
@@ -80,11 +47,10 @@ public class DruidModelSpec extends BaseModelSpec implements PreCreateInjectionM
         addActionSpec(actionSpec);
     }
 
-    /**
-     * 添加延迟支持
-     */
-    private void addDelayActionSpec() {
-        DelayActionSpec delayActionSpec = new DelayActionSpec();
-        this.addActionSpec(delayActionSpec);
+    //druid 暂时不对sql 或者表什么的进行匹配，只按照压测流量
+    @Override
+    protected List<MatcherSpec> createNewMatcherSpecs() {
+        ArrayList<MatcherSpec> matcherSpecs = new ArrayList<MatcherSpec>();
+        return matcherSpecs;
     }
 }
