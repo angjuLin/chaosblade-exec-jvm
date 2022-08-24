@@ -7,6 +7,7 @@ import com.alibaba.chaosblade.exec.common.model.Model;
 import com.alibaba.chaosblade.exec.common.model.action.ActionExecutor;
 import com.alibaba.chaosblade.exec.common.model.action.ActionSpec;
 import com.alibaba.chaosblade.exec.common.model.action.connpool.ConnectionPoolFullActionSpec;
+import com.alibaba.chaosblade.exec.common.model.action.delay.DelayActionSpec;
 import com.alibaba.chaosblade.exec.common.model.handler.PreCreateInjectionModelHandler;
 import com.alibaba.chaosblade.exec.common.model.handler.PreDestroyInjectionModelHandler;
 
@@ -19,6 +20,7 @@ public class DruidModelSpec extends BaseModelSpec implements PreCreateInjectionM
     public DruidModelSpec() {
         super();
         addConnectionPoolFullAction();
+        addDelayActionSpec();
     }
 
     @Override
@@ -76,5 +78,13 @@ public class DruidModelSpec extends BaseModelSpec implements PreCreateInjectionM
         actionSpec.setExample("# Do a full load experiment on the Druid database connection pool\n" +
                 "blade create druid connectionpoolfull");
         addActionSpec(actionSpec);
+    }
+
+    /**
+     * 添加延迟支持
+     */
+    private void addDelayActionSpec() {
+        DelayActionSpec delayActionSpec = new DelayActionSpec();
+        this.addActionSpec(delayActionSpec);
     }
 }

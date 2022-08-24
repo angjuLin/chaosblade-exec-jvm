@@ -16,10 +16,11 @@ import java.lang.reflect.Method;
 public class DruidDataSourceEnhancer extends BeforeEnhancer {
     private static final Logger LOGGER = LoggerFactory.getLogger(DruidDataSourceEnhancer.class);
 
+
     @Override
     public EnhancerModel doBeforeAdvice(ClassLoader classLoader, String className, Object object, Method method,
                                         Object[] methodArguments) throws Exception {
-
+        //TODO 如果设置延迟，并且接入了linkAgent，会导致2倍的延迟
         MatcherModel matcherModel = new MatcherModel();
         EnhancerModel enhancerModel = new EnhancerModel(classLoader, matcherModel);
         matcherModel.add(ModelConstant.CLUSTER_TEST, PradarServiceWrapper.isClusterTest());
