@@ -17,16 +17,16 @@ public class HikaricpDataSourcePlugin implements Plugin {
 
     @Override
     public ModelSpec getModelSpec() {
-        return null;
+        return new HikaricpModelSpec();
     }
 
     @Override
     public PointCut getPointCut() {
-        return null;
+        return new HikaricpDataSourcePointCut();
     }
 
     @Override
     public Enhancer getEnhancer() {
-        return null;
+        return new HikaricpDataSourceEnhancer();
     }
 }
